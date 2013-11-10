@@ -7,12 +7,14 @@ data, train_probs, cv_targets = Stock.train()
 assert len(data) == len(train_probs)
 assert len(data) == len(cv_targets)
 
-
 half = len(data)/2
-#data = Preprocess.polynomial(data, 2)
 data, holdout_data = data[:half], data[half:]
-#targets, holdout_targets = train_probs[:half], cv_targets[half:]
-#print targets[:50]
+targets, holdout_targets = cv_targets[:half], cv_targets[half:]
+
+Predictor.train(data, targets)
+preds = Predictor.predict(holdout_data)
+print auc(preds, holdout_targets)
+#print preds[0:50]
 
 ################################
 #spc_train_data= []
@@ -44,9 +46,3 @@ data, holdout_data = data[:half], data[half:]
 #print preds[:50]
 #print auc(preds, spc_hold_targets)
 ################################
-
-Predictor.train(data, cv_targets)
-preds = Predictor.predict(data)
-#print preds[0:50]
-
-print auc(preds, holdout_targets)
