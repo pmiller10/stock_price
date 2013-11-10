@@ -1,9 +1,13 @@
+import sys
 from data.stock import Stock
 from predictor import Predictor
 from score import auc
 
+submission_number = sys.argv[1]
+print submission_number 
+
 def submission(ids, preds):
-    name = 'submissions/submission1.csv'
+    name = "submissions/submission{0}.csv".format(submission_number)
     f = open(name, 'w')
     if len(ids) != len(preds):
         raise Exception("The number of IDs and the number of predictions are different")
