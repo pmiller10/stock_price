@@ -20,7 +20,7 @@ class Stock:
         return stocks
 
     @classmethod
-    def train(cls):
+    def train(cls, categorize=True):
         stocks = cls.load_train_data()
         stocks = [d[1:] for d in stocks] # remove ID
         opening_diffs = []
@@ -69,14 +69,25 @@ class Stock:
 
         #opening_diffs = [[item] for sublist in opening_diffs for item in sublist] # flatten
         #opening_diffs = [[d] for d in opening_diffs]
-        probs = []
-        for c in closing_diffs:
-            if c > 0:
-                probs.append(1)
-            elif c < 0:
-                probs.append(0)
-            elif c == 0:
-                probs.append(0.5)
+        if categorize:
+            probs = []
+            pos = 0.13
+            neg = -0.13
+            for c in closing_diffs:
+                if c >= pos:
+                    probs.append(1)
+                elif c < pos and c > 0:
+                    probs.append(0.75)
+                elif c <= neg:
+                    probs.append(0)
+                elif c < 0 and c > neg:
+                    probs.append(0.25)
+                elif c == 0:
+                    probs.append(0.5)
+                else:
+                    print Warning('didnt fit: '.format(c))
+        else:
+            probs = closing_diffs
 
         return data, probs
 

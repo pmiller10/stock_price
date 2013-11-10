@@ -6,9 +6,9 @@ class Predictor:
 
     @classmethod
     def train(cls, data, targets):
-        #model = LinearRegression()
+        model = LinearRegression()
         #model = SVR()
-        model = Ridge(alpha=0.9)
+        #model = Ridge(alpha=0.9)
         model.fit(data, targets)
         cls.model = model
 

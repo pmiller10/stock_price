@@ -20,9 +20,9 @@ def submission(ids, preds):
 
 poly = 3
 data, targets = Stock.train()
-data = Preprocess.polynomial(data, poly)
+#data = Preprocess.polynomial(data, poly)
 holdout_data, ids = Stock.test()
-holdout_data = Preprocess.polynomial(holdout_data, poly)
+#holdout_data = Preprocess.polynomial(holdout_data, poly)
 assert len(data) == len(targets)
 print len(holdout_data)
 print len(ids)

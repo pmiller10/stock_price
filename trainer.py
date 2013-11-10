@@ -4,7 +4,7 @@ from score import auc
 from preprocess import Preprocess
 
 data, targets = Stock.train()
-data = Preprocess.polynomial(data, 4)
+#data = Preprocess.polynomial(data, 4)
 #data = Preprocess.scale(data)
 assert len(data) == len(targets)
 #print data[0]
