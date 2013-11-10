@@ -64,7 +64,7 @@ class Stock:
             subdata.append(o)
             #subdata.append(open_vs_prior_close[i]) # don't use
             #subdata.append(volumes[i])
-            subdata.append(max_vs_open[i])
+            #subdata.append(max_vs_open[i])
             data.append(subdata)
 
         #opening_diffs = [[item] for sublist in opening_diffs for item in sublist] # flatten
@@ -92,7 +92,7 @@ class Stock:
 
             data = []
             data.append(diff)
-            data.append(open_vs_max)
+            #data.append(open_vs_max) # don't use
             #data.append(open_vs_close) # don't use
             opening_diffs.append(data)
             h = int((stock[0] * 100) + stock[1])

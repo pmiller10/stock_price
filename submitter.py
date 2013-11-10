@@ -2,6 +2,7 @@ import sys
 from data.stock import Stock
 from predictor import Predictor
 from score import auc
+from preprocess import Preprocess
 
 submission_number = sys.argv[1]
 print submission_number 
@@ -17,8 +18,11 @@ def submission(ids, preds):
     f.write(str(string))
     f.close()
 
+poly = 3
 data, targets = Stock.train()
+data = Preprocess.polynomial(data, poly)
 holdout_data, ids = Stock.test()
+holdout_data = Preprocess.polynomial(holdout_data, poly)
 assert len(data) == len(targets)
 print len(holdout_data)
 print len(ids)
