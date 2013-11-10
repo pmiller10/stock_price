@@ -25,30 +25,36 @@ class Stock:
         stocks = [d[1:] for d in stocks] # remove ID
         opening_diffs = []
         closing_diffs = []
-        all_openings = []
+        open_vs_prior_close = []
         for stock in stocks:
-            openings = []
-            for opening in stock[0::5]:
-                openings.append(opening)
-            diffs = []
+            openings = [opening for opening in stock[0::5]]
+            closings = [closing for closing in stock[3::5]]
+
+            # opening diffs
             for i,o in enumerate(openings[1:]):
                 diff = o - openings[i-1]
-                diffs.append(diff)
-            opening_diffs.append(diffs)
-            all_openings += openings[1:]
+                opening_diffs.append(diff)
 
-            closings = []
-            for closing in stock[3::5]:
-                closings.append(closing)
-            diffs = []
+            # closing diffs
             for i,c in enumerate(closings[1:]):
                 diff = c - openings[i+1]
-                diffs.append(diff)
+                closing_diffs.append(diff)
 
-            closing_diffs.append(diffs)
+            # opening vs prior day close diff
+            for i,o in enumerate(openings[1:]):
+                diff = o - closings[i]
+                open_vs_prior_close.append(diff)
 
-        opening_diffs = [[item] for sublist in opening_diffs for item in sublist] # flatten
-        closing_diffs = [item for sublist in closing_diffs for item in sublist] # flatten
+        assert len(opening_diffs) == len(open_vs_prior_close)
+        data = []
+        for i,o in enumerate(opening_diffs):
+            subdata = []
+            subdata.append(o)
+            subdata.append(open_vs_prior_close[i])
+            data.append(subdata)
+
+        #opening_diffs = [[item] for sublist in opening_diffs for item in sublist] # flatten
+        #opening_diffs = [[d] for d in opening_diffs]
         probs = []
         for c in closing_diffs:
             if c > 0:
@@ -56,10 +62,9 @@ class Stock:
             elif c < 0:
                 probs.append(0)
             elif c == 0:
-                #print 'is 0'
                 probs.append(0.5)
 
-        return opening_diffs, probs
+        return data, probs
 
     @classmethod
     def test(cls):
@@ -68,7 +73,9 @@ class Stock:
         headers = []
         for stock in stocks:
             diff = stock[-1] - stock[-6] 
-            opening_diffs.append([diff])
+            open_vs_close = stock[-1] - stock[-3]
+            data = [diff, open_vs_close]
+            opening_diffs.append(data)
             h = int((stock[0] * 100) + stock[1])
             headers.append(h)
         return opening_diffs, headers
