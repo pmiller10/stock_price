@@ -64,11 +64,19 @@ class Stock:
             subdata.append(o)
             #subdata.append(open_vs_prior_close[i]) # don't use
             #subdata.append(volumes[i])
-            #subdata.append(max_vs_open[i])
+            subdata.append(max_vs_open[i])
             data.append(subdata)
 
         #opening_diffs = [[item] for sublist in opening_diffs for item in sublist] # flatten
         #opening_diffs = [[d] for d in opening_diffs]
+        norms = []
+        for c in closing_diffs:
+            if c > 0:
+                norms.append(1)
+            elif c < 0:
+                norms.append(0)
+            elif c == 0:
+                norms.append(0.5)
         if categorize:
             probs = []
             pos = 0.13
@@ -89,7 +97,7 @@ class Stock:
         else:
             probs = closing_diffs
 
-        return data, probs
+        return data, probs, norms
 
     @classmethod
     def test(cls):
@@ -103,7 +111,7 @@ class Stock:
 
             data = []
             data.append(diff)
-            #data.append(open_vs_max) # don't use
+            data.append(open_vs_max) # don't use
             #data.append(open_vs_close) # don't use
             opening_diffs.append(data)
             h = int((stock[0] * 100) + stock[1])
