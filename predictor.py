@@ -1,12 +1,14 @@
 from sklearn.linear_model import LinearRegression
 from sklearn.svm import SVR
+from sklearn.linear_model import Ridge
 
 class Predictor:
 
     @classmethod
     def train(cls, data, targets):
-        model = LinearRegression()
+        #model = LinearRegression()
         #model = SVR()
+        model = Ridge(alpha=0.9)
         model.fit(data, targets)
         cls.model = model
 
