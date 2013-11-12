@@ -3,6 +3,7 @@ from sklearn.svm import SVR
 from sklearn.linear_model import Ridge, LogisticRegression
 from models.stock_model import StockPredictor
 from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor, ExtraTreesRegressor, ExtraTreesClassifier, RandomForestClassifier
+from models.linear_regression import AucLinearRegression
 
 
 class MyRegressor():
@@ -22,15 +23,16 @@ class Predictor:
     def train(cls, data, targets):
         cls.models = []
         #cls.models.append(MyRegressor)
-        cls.models.append(Ridge(alpha=0.5, tol=0.5))
-        cls.models.append(Ridge(alpha=0.05, tol=0.05))
-        cls.models.append(Ridge(alpha=0.005, tol=0.005))
+        #cls.models.append(Ridge(alpha=0.5, tol=0.5))
+        #cls.models.append(Ridge(alpha=0.05, tol=0.05))
+        #cls.models.append(Ridge(alpha=0.005, tol=0.005))
+        cls.models.append(AucLinearRegression())
         #cls.models.append(LogisticRegression(penalty='l1', tol=0.001))
         #cls.models.append(ExtraTreesClassifier())
         #cls.models.append(RandomForestClassifier())
         #cls.models.append(LinearRegression())
-        cls.models.append(ExtraTreesRegressor(n_estimators=5))
-        cls.models.append(RandomForestRegressor(n_estimators=5))
+        #cls.models.append(ExtraTreesRegressor(n_estimators=5))
+        #cls.models.append(RandomForestRegressor(n_estimators=5))
  
         #model = SVR()
         #model = Ridge(alpha=0.001, tol=0.01)
