@@ -2,7 +2,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.svm import SVR
 from sklearn.linear_model import Ridge, LogisticRegression
 from models.stock_model import StockPredictor
-from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor, ExtraTreesRegressor, ExtraTreesClassifier
+from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor, ExtraTreesRegressor, ExtraTreesClassifier, RandomForestClassifier
 
 
 class MyRegressor():
@@ -22,13 +22,18 @@ class Predictor:
     def train(cls, data, targets):
         cls.models = []
         #cls.models.append(MyRegressor)
-        #cls.models.append(Ridge(alpha=1.1, tol=0.5))
-        cls.models.append(LogisticRegression(penalty='l1', tol=0.01))
+        cls.models.append(Ridge(alpha=0.5, tol=0.5))
+        cls.models.append(Ridge(alpha=0.05, tol=0.05))
+        cls.models.append(Ridge(alpha=0.005, tol=0.005))
+        #cls.models.append(LogisticRegression(penalty='l1', tol=0.001))
         #cls.models.append(ExtraTreesClassifier())
+        #cls.models.append(RandomForestClassifier())
         #cls.models.append(LinearRegression())
+        cls.models.append(ExtraTreesRegressor(n_estimators=5))
+        cls.models.append(RandomForestRegressor(n_estimators=5))
+ 
         #model = SVR()
         #model = Ridge(alpha=0.001, tol=0.01)
-        #model = ExtraTreesRegressor(n_estimators=5)
         #model = StockPredictor()
         #model = GradientBoostingRegressor(learning_rate=0.05, max_depth=3)
         #model = RandomForestRegressor()
@@ -41,7 +46,10 @@ class Predictor:
         for d in data:
             sub = []
             for m in cls.models:
-                sub.append(m.predict(d)[0])
+                pred = m.predict(d)
+                if not isinstance(pred, float):
+                    pred = pred[0]
+                sub.append(pred)
             p = sum(sub)/float(len(cls.models))
             preds.append(p)
 

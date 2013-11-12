@@ -7,6 +7,7 @@ data, targets, cv_targets = Stock.train()
 
 #data = Preprocess.scale(data)
 #cv_targets = Preprocess.scale(cv_targets)
+data = Preprocess.polynomial(data, 5)
 half = len(data)/2
 tr_data, holdout_data = data[:half], data[half:]
 train_targets, holdout_targets = targets[:half], targets[half:]

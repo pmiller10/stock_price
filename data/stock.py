@@ -62,7 +62,7 @@ class Stock:
 
         print 'before ', closing_diffs[:20] 
         print 'avg ', sum(closing_diffs)/float(len(closing_diffs))
-        directions = cls.norm4(closing_diffs)
+        directions = cls.norm5(closing_diffs)
         print 'avg ', sum(directions)/float(len(directions))
         print 'max ', max(directions)
         print 'min ', min(directions)
@@ -158,7 +158,17 @@ class Stock:
         #data = preprocessing.normalize(data, norm='l2')
         data = Preprocess.norm(data)
         print 'deviation ', Preprocess.standard_deviation(data)
-        data = [d[0] for d in data]
+        data = [d[0]-0.04 for d in data]
         data = [round(d, 1) for d in data]
+
+        return data
+
+    @classmethod
+    def norm5(cls, data):
+        data = [[d] for d in data]
+        print 'deviation ', Preprocess.standard_deviation(data)
+        #data = Preprocess.scale(data)
+        #print 'deviation ', Preprocess.standard_deviation(data)
+        data = [(d[0]*10)+0.5 for d in data]
 
         return data

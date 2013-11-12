@@ -18,7 +18,7 @@ def submission(ids, preds):
     f.write(str(string))
     f.close()
 
-data, targets = Stock.train()
+data, targets, _ = Stock.train()
 holdout_data, ids = Stock.test()
 assert len(data) == len(targets)
 
