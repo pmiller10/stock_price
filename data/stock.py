@@ -62,7 +62,7 @@ class Stock:
 
         print 'before ', closing_diffs[:20] 
         print 'avg ', sum(closing_diffs)/float(len(closing_diffs))
-        directions = cls.norm2(closing_diffs)
+        directions = cls.norm4(closing_diffs)
         print 'avg ', sum(directions)/float(len(directions))
         print 'max ', max(directions)
         print 'min ', min(directions)
@@ -77,7 +77,8 @@ class Stock:
             #subdata.append(max_vs_open[i])
             data.append(subdata)
 
-        return data, directions
+        half = len(closing_diffs)/2
+        return data, directions, cls.norm2(closing_diffs[half:])
 
     @classmethod
     def test(cls):
@@ -144,9 +145,7 @@ class Stock:
         print 'deviation ', Preprocess.standard_deviation(data)
         data = [d[0] for d in data]
 
-        data = Preprocess.root(data, 4)
-        data = Preprocess.squeeze(data)
-        data = Preprocess.squeeze(data)
+        data = Preprocess.root(data, 2)
         data = Preprocess.squeeze(data)
         data = Preprocess.squeeze(data)
 
@@ -156,9 +155,10 @@ class Stock:
 
         data = [[d] for d in data]
         print 'deviation ', Preprocess.standard_deviation(data)
-        data = preprocessing.normalize(data, norm='l2')
+        #data = preprocessing.normalize(data, norm='l2')
         data = Preprocess.norm(data)
         print 'deviation ', Preprocess.standard_deviation(data)
         data = [d[0] for d in data]
+        data = [round(d, 1) for d in data]
 
         return data

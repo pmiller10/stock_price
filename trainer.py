@@ -3,7 +3,7 @@ from predictor import Predictor
 from score import auc
 from preprocess import Preprocess
 
-data, targets = Stock.train()
+data, targets, cv_targets = Stock.train()
 
 #data = Preprocess.scale(data)
 #cv_targets = Preprocess.scale(cv_targets)
@@ -19,4 +19,4 @@ print 'preds ', preds[:20]
 #print preds[:stop]
 #print holdout_targets[:stop]
 #print auc(preds[:stop], holdout_targets[:stop])
-print auc(preds, holdout_targets)
+print auc(preds, cv_targets)

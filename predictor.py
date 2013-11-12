@@ -1,8 +1,8 @@
 from sklearn.linear_model import LinearRegression
 from sklearn.svm import SVR
-from sklearn.linear_model import Ridge
+from sklearn.linear_model import Ridge, LogisticRegression
 from models.stock_model import StockPredictor
-from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor, ExtraTreesRegressor
+from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor, ExtraTreesRegressor, ExtraTreesClassifier
 
 
 class MyRegressor():
@@ -22,7 +22,9 @@ class Predictor:
     def train(cls, data, targets):
         cls.models = []
         #cls.models.append(MyRegressor)
-        cls.models.append(Ridge(alpha=1.1, tol=0.5))
+        #cls.models.append(Ridge(alpha=1.1, tol=0.5))
+        cls.models.append(LogisticRegression(penalty='l1', tol=0.01))
+        #cls.models.append(ExtraTreesClassifier())
         #cls.models.append(LinearRegression())
         #model = SVR()
         #model = Ridge(alpha=0.001, tol=0.01)
@@ -39,7 +41,7 @@ class Predictor:
         for d in data:
             sub = []
             for m in cls.models:
-                sub.append(m.predict(d))
+                sub.append(m.predict(d)[0])
             p = sum(sub)/float(len(cls.models))
             preds.append(p)
 
