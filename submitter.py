@@ -18,13 +18,11 @@ def submission(ids, preds):
     f.write(str(string))
     f.close()
 
-data, _, targets = Stock.train()
+data, targets = Stock.train()
 holdout_data, ids = Stock.test()
 assert len(data) == len(targets)
-print len(holdout_data)
-print len(ids)
 
 Predictor.train(data, targets)
-preds = Predictor.predict(holdout_data)
+preds = Predictor.multi_predict(holdout_data)
 print preds[0:50]
 submission(ids, preds)

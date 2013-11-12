@@ -5,6 +5,7 @@ sys.path.append("/home/ubuntu/scikit-learn")
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.decomposition import PCA
 from sklearn.kernel_approximation import RBFSampler
+from math import sqrt
 
 class Preprocess():
 
@@ -61,3 +62,33 @@ class Preprocess():
         min_max_scaler = MinMaxScaler()
         matrix = min_max_scaler.fit_transform(matrix)
         return matrix
+
+    @classmethod
+    def root(self, matrix, n=2.):
+        n = 1/float(n)
+        roots = []
+        for m in matrix:
+            if m > 0:
+                roots.append(m**n)
+            elif m == 0:
+                roots.append(0)
+            else:
+                pos_root = (m*-1) ** n
+                neg = pos_root * -1
+                roots.append(neg)
+        return roots
+
+    @classmethod
+    def squeeze(self, matrix):
+        roots = []
+        for m in matrix:
+            if m > 0:
+                roots.append(m**(1/(1.-m)))
+            elif m == 0:
+                roots.append(0)
+            else:
+                m *= -1
+                m = m**(1/(1.-m))
+                m *= -1
+                roots.append(m)
+        return roots

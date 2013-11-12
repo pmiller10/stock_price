@@ -1,3 +1,7 @@
+from preprocess import Preprocess
+from sklearn import preprocessing
+import math
+
 class Stock:
 
     @classmethod
@@ -54,9 +58,15 @@ class Stock:
                 diff = o - maxs[i]
                 max_vs_open.append(diff)
 
-        assert len(opening_diffs) == len(open_vs_prior_close)
-        assert len(opening_diffs) == len(volumes)
-        assert len(opening_diffs) == len(max_vs_open)
+        assert len(opening_diffs) == len(open_vs_prior_close) == len(volumes) == len(max_vs_open)
+
+        print 'before ', closing_diffs[:20] 
+        print 'avg ', sum(closing_diffs)/float(len(closing_diffs))
+        directions = cls.norm2(closing_diffs)
+        print 'avg ', sum(directions)/float(len(directions))
+        print 'max ', max(directions)
+        print 'min ', min(directions)
+        print 'after ', directions[:20] 
 
         data = []
         for i,o in enumerate(opening_diffs):
@@ -67,37 +77,7 @@ class Stock:
             #subdata.append(max_vs_open[i])
             data.append(subdata)
 
-        #opening_diffs = [[item] for sublist in opening_diffs for item in sublist] # flatten
-        #opening_diffs = [[d] for d in opening_diffs]
-        norms = []
-        for c in closing_diffs:
-            if c > 0:
-                norms.append(1)
-            elif c < 0:
-                norms.append(0)
-            elif c == 0:
-                norms.append(0.5)
-        if categorize:
-            probs = []
-            pos = 0.13
-            neg = -0.13
-            for c in closing_diffs:
-                if c >= pos:
-                    probs.append(1)
-                elif c < pos and c > 0:
-                    probs.append(0.75)
-                elif c <= neg:
-                    probs.append(0)
-                elif c < 0 and c > neg:
-                    probs.append(0.25)
-                elif c == 0:
-                    probs.append(0.5)
-                else:
-                    print Warning('didnt fit: '.format(c))
-        else:
-            probs = closing_diffs
-
-        return data, probs, norms
+        return data, directions
 
     @classmethod
     def test(cls):
@@ -117,3 +97,68 @@ class Stock:
             h = int((stock[0] * 100) + stock[1])
             headers.append(h)
         return opening_diffs, headers
+
+    @classmethod
+    def norm(cls, data):
+        small = min(data) * -1.
+        positives = [i+small for i in data]
+        big = max(positives)
+        normed = [i/big for i in positives]
+        return normed 
+
+    @classmethod
+    def norm2(cls, data):
+        norms = []
+        for c in data:
+            if c > 0:
+                norms.append(1)
+            elif c < 0:
+                norms.append(0)
+            elif c == 0:
+                norms.append(0.5)
+        return norms
+
+    @classmethod
+    def norm3(cls, data):
+        probs = []
+        pos = 0.13
+        neg = -0.13
+        for c in data:
+            if c >= pos:
+                probs.append(1)
+            elif c < pos and c > 0:
+                probs.append(0.75)
+            elif c <= neg:
+                probs.append(0)
+            elif c < 0 and c > neg:
+                probs.append(0.25)
+            elif c == 0:
+                probs.append(0.5)
+            else:
+                print Warning('didnt fit: '.format(c))
+        return probs
+
+    @classmethod
+    def norm4(cls, data):
+        data = [[d] for d in data]
+        print 'deviation ', Preprocess.standard_deviation(data)
+        data = [d[0] for d in data]
+
+        data = Preprocess.root(data, 4)
+        data = Preprocess.squeeze(data)
+        data = Preprocess.squeeze(data)
+        data = Preprocess.squeeze(data)
+        data = Preprocess.squeeze(data)
+
+        #data = [[d] for d in data]
+        #data = Preprocess.scale(data)
+        #data = [d[0] for d in data]
+
+        data = [[d] for d in data]
+        print 'deviation ', Preprocess.standard_deviation(data)
+        data = preprocessing.normalize(data, norm='l2')
+        data = Preprocess.norm(data)
+        print 'deviation ', Preprocess.standard_deviation(data)
+        data = [d[0] for d in data]
+
+        return data
